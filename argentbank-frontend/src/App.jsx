@@ -6,7 +6,17 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { restoreSession } from "./store/authSlice";
+
+
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(restoreSession());
+  }, [dispatch]);
   return (
     <><Header />
 
