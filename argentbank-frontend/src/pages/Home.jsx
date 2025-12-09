@@ -4,7 +4,7 @@ import securityIcon from "../assets/img/icon-security.png";
 
 export default function Home() {
   return (
-    <>
+    <main>
       <div className="hero">
         <section className="hero-content">
           <h2 className="sr-only">Promoted Content</h2>
@@ -48,6 +48,6 @@ export default function Home() {
           </p>
         </div>
       </section>
-    </>
+    </main>
   );
 }
