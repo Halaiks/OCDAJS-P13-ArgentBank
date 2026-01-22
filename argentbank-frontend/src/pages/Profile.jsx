@@ -1,12 +1,31 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserProfile } from "../store/userSlice";
+
 
 export default function Profile() {
+
+  const dispatch = useDispatch();
+  const { profile, loading, error } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    dispatch(fetchUserProfile());
+  }, [dispatch]);
+
+  if (loading) {
+    return <p>Loading profile...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
   return (
     <main className="main bg-dark">
       <div className="header">
         <h1>
           Welcome back
           <br />
-          Tony Jarvis!
+          {profile?.firstName} {profile?.lastName}!
         </h1>
         <button className="edit-button">Edit Name</button>
       </div>
