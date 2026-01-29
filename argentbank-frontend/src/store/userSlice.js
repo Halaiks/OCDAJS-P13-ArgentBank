@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { logout } from "./authSlice";
 
 // Thunk asynchrone pour récupérer le profil de l'utilisateur connecté
 export const fetchUserProfile = createAsyncThunk(
   "user/fetchProfile",
-  async (_, { getState, rejectWithValue }) => {
+  async (_, { getState, rejectWithValue, dispatch }) => {
     try {
       const token = getState().auth.token;
 
@@ -20,7 +21,14 @@ export const fetchUserProfile = createAsyncThunk(
 
       return response.data.body;
     } catch (error) {
-      return rejectWithValue(error.response.data.message);
+      if (
+        error.response?.status === 401 ||
+        error.response?.data?.message === "jwt expired"
+      ) {
+        dispatch(logout());
+      }
+
+      return rejectWithValue(error.response?.data?.message);
     }
   }
 );
@@ -29,7 +37,7 @@ export const fetchUserProfile = createAsyncThunk(
 // Thunk asynchrone pour mettre à jour le prénom et le nom de l'utilisateur
 export const updateUserProfile = createAsyncThunk(
   "user/updateProfile",
-  async ({ firstName, lastName }, { getState, rejectWithValue }) => {
+  async ({ firstName, lastName }, { getState, rejectWithValue, dispatch }) => {
     try {
       const token = getState().auth.token;
 
@@ -45,7 +53,14 @@ export const updateUserProfile = createAsyncThunk(
 
       return response.data.body;
     } catch (error) {
-      return rejectWithValue(error.response.data.message);
+      if (
+        error.response?.status === 401 ||
+        error.response?.data?.message === "jwt expired"
+      ) {
+        dispatch(logout());
+      }
+
+      return rejectWithValue(error.response?.data?.message);
     }
   }
 );
