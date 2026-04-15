@@ -110,6 +110,108 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+  /accounts/{accountId}/transactions:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Get account transactions
+      description: API for fetching all transactions of a specific account for the current month
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: path
+          name: accountId
+          type: string
+          required: true
+          description: ID of the account
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          schema:
+            $ref: '#/definitions/TransactionsResponse'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Account not found
+        '500':
+          description: Internal Server Error
+  /accounts/{accountId}/transactions/{transactionId}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Get transaction details
+      description: API for fetching details of a specific transaction
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - in: path
+          name: accountId
+          type: string
+          required: true
+        - in: path
+          name: transactionId
+          type: string
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction retrieved successfully
+          schema:
+            $ref: '#/definitions/Transaction'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Transaction not found
+        '500':
+          description: Internal Server Error
+    patch:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Update transaction information
+      description: API for updating transaction category or notes
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+        - in: path
+          name: accountId
+          type: string
+          required: true
+        - in: path
+          name: transactionId
+          type: string
+          required: true
+        - in: body
+          name: body
+          description: Fields to update
+          required: true
+          schema:
+            $ref: '#/definitions/TransactionUpdate'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction updated successfully
+        '400':
+          description: Invalid Fields
+        '401':
+          description: Unauthorized
+        '404':
+          description: Transaction not found
+        '500':
+          description: Internal Server Error
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -164,3 +266,38 @@ definitions:
         type: string
       lastName:
         type: string
+  Transaction:
+    type: object
+    properties:
+      id:
+        type: string
+      date:
+        type: string
+      description:
+        type: string
+      amount:
+        type: number
+      balance:
+        type: number
+      category:
+        type: string
+      notes:
+        type: string
+  TransactionUpdate:
+    type: object
+    properties:
+      category:
+        type: string
+      notes:
+        type: string
+  TransactionsResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: array
+        items:
+          $ref: '#/definitions/Transaction'
