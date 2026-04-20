@@ -9,6 +9,7 @@ basePath: /api/v1
 schemes:
   - http
 paths:
+# Endpoint de connexion de l'utilisateur, permettant d'obtenir un token JWT pour les requêtes authentifiées
   /user/login:
     post:
       tags:
@@ -57,6 +58,7 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+# Endpoints pour la gestion du profil utilisateur, nécessitant une authentification via token JWT
   /user/profile:
     post:
       security:
@@ -110,6 +112,7 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+          # Endpoints pour la gestion des transactions d'un compte
   /accounts/{accountId}/transactions:
     get:
       security:
@@ -141,6 +144,7 @@ paths:
           description: Account not found
         '500':
           description: Internal Server Error
+          # Endpoints pour la gestion des détails d'une transaction spécifique
   /accounts/{accountId}/transactions/{transactionId}:
     get:
       security:
@@ -213,10 +217,12 @@ paths:
         '500':
           description: Internal Server Error
 securityDefinitions:
+# Définition de la sécurité pour les endpoints nécessitant une authentification via token JWT dans l'en-tête Authorization
   Bearer:
     type: apiKey
     name: Authorization
     in: header
+    # Modélisation des données utilisées dans l'API
 definitions:
   User:
     properties:
@@ -266,6 +272,7 @@ definitions:
         type: string
       lastName:
         type: string
+        # Modélisation des données liées aux transactions bancaires
   Transaction:
     type: object
     properties:
@@ -283,6 +290,7 @@ definitions:
         type: string
       notes:
         type: string
+    # Modélisation des données utilisées pour la mise à jour d'une transaction
   TransactionUpdate:
     type: object
     properties:
@@ -290,6 +298,7 @@ definitions:
         type: string
       notes:
         type: string
+        # Modélisation de la réponse pour la récupération des transactions d'un compte
   TransactionsResponse:
     type: object
     properties:
